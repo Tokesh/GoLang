@@ -6,9 +6,3 @@ type Product struct {
 	UpcCode       string `json:"UpcCode"`
 	Title         string `json:"Title"`
 }
-
-type ProductType struct {
-	ProductTypeId int
-	ProductType   string
-	ParentIdRef   int
-}
