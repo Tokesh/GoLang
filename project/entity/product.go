@@ -1,8 +1,8 @@
 package entity
 
 type Product struct {
-	ProductId     int    `json:"ProductId"`
-	ProductTypeId int    `json:"ProductTypeId"`
-	UpcCode       string `json:"UpcCode"`
-	Title         string `json:"Title"`
+	ProductId     int    `json:"product_id"`
+	ProductTypeId int    `json:"product_type_id"`
+	UpcCode       string `json:"upc_code"`
+	Title         string `json:"title"`
 }
