@@ -7,8 +7,8 @@ import (
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"log"
-	"projectGoLang/entity"
-	"projectGoLang/utils"
+	"projectGoLang/source/domain/entity"
+	"projectGoLang/source/infrastructure/utils"
 	"time"
 )
 

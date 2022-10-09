@@ -5,3 +5,6 @@ type User struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
+type Status struct {
+	Status string `json:"status" db:"status" binding:"required"`
+}

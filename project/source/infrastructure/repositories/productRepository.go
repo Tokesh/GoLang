@@ -1,10 +1,10 @@
-package service
+package repositories
 
 import (
 	"context"
 	"fmt"
-	"projectGoLang/entity"
-	"projectGoLang/postgresql"
+	"projectGoLang/source/domain/entity"
+	"projectGoLang/source/infrastructure/postgresql"
 )
 
 type Repository struct {
@@ -23,7 +23,6 @@ func (r *Repository) FindOneProduct(id string) entity.Product {
 	q := `
 		SELECT product_id,product_type_id, upc_code, title FROM public.products WHERE product_id = $1
 	`
-
 	var prod entity.Product
 	err := r.client.QueryRow(context.TODO(), q, id).Scan(&prod.ProductId, &prod.ProductTypeId, &prod.UpcCode, &prod.Title)
 	if err != nil {
@@ -101,10 +100,10 @@ func (r *Repository) DeleteProductByID(id string) entity.Product {
 //	return ProductService{}
 //}
 //
-//func (service *ProductService) AddProduct(product entity.Product) entity.Product {
-//	service.Products = append(service.Products, product)
+//func (repositories *ProductService) AddProduct(product entity.Product) entity.Product {
+//	repositories.Products = append(repositories.Products, product)
 //	return product
 //}
-//func (service *ProductService) FindAllProducts() []entity.Product {
-//	return service.Products
+//func (repositories *ProductService) FindAllProducts() []entity.Product {
+//	return repositories.Products
 //}

@@ -1,9 +1,9 @@
-package service
+package repositories
 
 import (
 	"context"
 	"fmt"
-	"projectGoLang/entity"
+	"projectGoLang/source/domain/entity"
 )
 
 func (r *Repository) AddToCart(cart *entity.Cart) *entity.Cart {
@@ -18,15 +18,35 @@ func (r *Repository) AddToCart(cart *entity.Cart) *entity.Cart {
 	return cart
 }
 
-func (r *Repository) DeleteFromCartByUserID(cart *entity.Cart) *entity.Cart {
+func (r *Repository) DeleteFromCartByUserID(userId int) error {
 	q := `
 		delete from shopping_cart where user_id = $1
 	`
-	err := r.client.QueryRow(context.TODO(), q, cart.UserID)
+	_, err := r.client.Query(context.TODO(), q, userId)
 	if err != nil {
-		return cart
+		return err
 	}
-	return cart
+	return nil
+}
+
+func (r *Repository) SelectCartByUserID(userId int) ([]entity.Cart, error) {
+	q := `
+		SELECT user_id, product_id, quantity FROM public.shopping_cart WHERE user_id = $1
+	`
+	carts := make([]entity.Cart, 0)
+	rows, err := r.client.Query(context.TODO(), q, userId)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var cart entity.Cart
+		err = rows.Scan(&cart.UserID, &cart.ProductID, &cart.Quantity)
+		if err != nil {
+			return nil, err
+		}
+		carts = append(carts, cart)
+	}
+	return carts, nil
 }
 
 //func (r *Repository) DeleteProductByID(id string) entity.Product {

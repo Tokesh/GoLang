@@ -1,9 +1,9 @@
-package service
+package repositories
 
 import (
 	"context"
 	"fmt"
-	"projectGoLang/entity"
+	"projectGoLang/source/domain/entity"
 )
 
 func (r *Repository) CreateUser(user entity.User) bool {
@@ -30,6 +30,7 @@ func (r *Repository) FindUserID(user entity.User) entity.User {
 	}
 	return user
 }
+
 func (r *Repository) FindUserPassword(user entity.User) entity.User {
 	q := `
 		SELECT password from user_password where username = $1
