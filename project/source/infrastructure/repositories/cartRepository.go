@@ -2,20 +2,19 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 	"projectGoLang/source/domain/entity"
 )
 
-func (r *Repository) AddToCart(cart *entity.Cart) *entity.Cart {
+func (r *Repository) AddToCartRepo(cart *entity.Cart) error {
 	q := `
 		INSERT INTO shopping_cart(user_id, product_id, quantity) 
 		VALUES($1, $2, $3)
 	`
-	err := r.client.QueryRow(context.TODO(), q, cart.UserID, cart.ProductID, cart.Quantity)
+	_, err := r.client.Query(context.TODO(), q, cart.UserID, cart.ProductID, cart.Quantity)
 	if err != nil {
-		fmt.Errorf("Something go wrong", err)
+		return err
 	}
-	return cart
+	return nil
 }
 
 func (r *Repository) DeleteFromCartByUserID(userId int) error {
@@ -47,6 +46,17 @@ func (r *Repository) SelectCartByUserID(userId int) ([]entity.Cart, error) {
 		carts = append(carts, cart)
 	}
 	return carts, nil
+}
+
+func (r *Repository) UpdateCartRepo(cart *entity.Cart) error {
+	q := `
+		update shopping_cart set quantity = $1 where user_id=$2 and product_id = $3
+	`
+	_, err := r.client.Query(context.TODO(), q, &cart.Quantity, &cart.UserID, &cart.ProductID)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 //func (r *Repository) DeleteProductByID(id string) entity.Product {

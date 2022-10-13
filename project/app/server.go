@@ -22,8 +22,34 @@ var (
 
 func main() {
 	server := gin.Default()
-	server.GET("/cart/:id", Controller.SelectFromCartByID)
-	server.DELETE("/cart/:id", Controller.DeleteFromCartByID)
+	//server.GET("/cart/:id", Controller.SelectFromCartByID)
+	//server.DELETE("/cart/:id", Controller.DeleteFromCartByID)
+	//server.POST("/cart", Controller.AddToCart)
+	//server.PUT("/cart", Controller.UpdateCartControl)
+	cart := server.Group("/cart")
+	{
+		cart.GET("/:id", Controller.SelectFromCartByID)
+		cart.DELETE("/:id", Controller.DeleteFromCartByID)
+		cart.POST("", Controller.AddToCart)
+		cart.PUT("", Controller.UpdateCartControl)
+	}
+	products := server.Group("/products")
+	{
+		products.GET("/:id", Controller.FindOneProduct)
+		products.GET("", Controller.FindAllProducts)
+		products.POST("", Controller.CreateOneProduct)
+		products.PUT("", Controller.UpdateOneProduct)
+		products.DELETE("/:id", Controller.DeleteOneProduct)
+	}
+	server.POST("/user", Controller.Login)
+	server.GET("/user", Controller.Validate)
+
+	//server.POST("/login", Controller.Login)
+	//server.GET("/products/:id", Controller.FindOneProduct)
+	//server.GET("/products", Controller.FindAllProducts)
+	//server.POST("/products", Controller.CreateOneProduct)
+	//server.PUT("/products", Controller.UpdateOneProduct)
+	//server.DELETE("/products/:id", Controller.DeleteOneProduct)
 	server.Run()
 	//if err := server.Run(":8080", Controller.InitRoutes()); err != nil {
 	//	log.Fatalf("Error: %s", err.Error())
