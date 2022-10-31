@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	"projectGoLang/source/app/controller"
+	"projectGoLang/app/controller"
 	"projectGoLang/source/app/services"
 	"projectGoLang/source/domain/entity"
 	"projectGoLang/source/infrastructure/postgresql"
