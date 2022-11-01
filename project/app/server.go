@@ -41,6 +41,14 @@ func main() {
 		products.PUT("", Controller.UpdateOneProduct)
 		products.DELETE("/:id", Controller.DeleteOneProduct)
 	}
+	payments := server.Group("/payments")
+	{
+		payments.GET("/paymentId/:id", Controller.SelectPaymentByPaymentID)
+		payments.GET("/userId/:id", Controller.SelectPaymentByUserID)
+		payments.POST("", Controller.AddToPayment)
+		payments.PUT("", Controller.UpdatePaymentControl)
+		payments.DELETE("/:id", Controller.DeleteFromPayment)
+	}
 	server.POST("/user", Controller.Login)
 	server.GET("/user", Controller.Validate)
 
