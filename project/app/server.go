@@ -8,6 +8,7 @@ import (
 	"projectGoLang/source/domain/entity"
 	"projectGoLang/source/infrastructure/postgresql"
 	"projectGoLang/source/infrastructure/repositories"
+	"projectGoLang/source/infrastructure/utils"
 )
 
 var (
@@ -17,7 +18,8 @@ var (
 	postgreSQLClient, err = postgresql.NewClient(context.TODO(), 3, cfg.Storage)
 	repository            = repositories.New(postgreSQLClient)
 	service               = services.NewService(&repository)
-	Controller            = controller.New(*service)
+	redisCache            = utils.NewRedisCache("localhost:6379", 0, 3600)
+	Controller            = controller.New(*service, *redisCache)
 )
 
 func main() {

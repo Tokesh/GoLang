@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"projectGoLang/source/app/services"
@@ -11,30 +12,60 @@ import (
 
 type Controller struct {
 	Service services.Service
+	Cache   utils.RedisCache
 }
 
-func New(service services.Service) Controller {
+func New(service services.Service, cache utils.RedisCache) Controller {
 	return Controller{
 		Service: service,
+		Cache:   cache,
 	}
 }
 
 func (c *Controller) FindOneProduct(ctx *gin.Context) {
 	ProductId := ctx.Param("id")
-	ProductIdInt, err := strconv.Atoi(ProductId)
-	if err != nil {
-		utils.NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
-		return
+	var productCache = c.Cache.Get(ProductId)
+	if productCache.ProductId == 0 {
+		fmt.Println("Still not in Cache, after this request i'll add it to Cache!")
+		ProductIdInt, err := strconv.Atoi(ProductId)
+		if err != nil {
+			utils.NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+			return
+		}
+		prod, err := c.Service.SelectProduct(ProductIdInt)
+		if err != nil {
+			utils.NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+			return
+		}
+		ctx.JSON(http.StatusOK, map[string]interface{}{
+			"product": prod,
+		})
+		c.Cache.Set(ProductId, &prod)
+	} else {
+		fmt.Println("Cached")
+		ctx.JSON(http.StatusOK, map[string]interface{}{
+			"product": productCache,
+		})
 	}
-	prod, err := c.Service.SelectProduct(ProductIdInt)
-	if err != nil {
-		utils.NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
-		return
-	}
-	ctx.JSON(http.StatusOK, map[string]interface{}{
-		"product": prod,
-	})
+
 }
+
+//func (c *Controller) FindOneProduct(ctx *gin.Context) {
+//	ProductId := ctx.Param("id")
+//	ProductIdInt, err := strconv.Atoi(ProductId)
+//	if err != nil {
+//		utils.NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+//		return
+//	}
+//	prod, err := c.Service.SelectProduct(ProductIdInt)
+//	if err != nil {
+//		utils.NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+//		return
+//	}
+//	ctx.JSON(http.StatusOK, map[string]interface{}{
+//		"product": prod,
+//	})
+//}
 
 func (c *Controller) FindAllProducts(ctx *gin.Context) {
 	prods, err := c.Service.SelectAllProducts()
