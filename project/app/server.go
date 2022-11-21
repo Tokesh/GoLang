@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"projectGoLang/app/controller"
 	"projectGoLang/source/app/services"
 	"projectGoLang/source/domain/entity"
@@ -12,7 +14,7 @@ import (
 )
 
 var (
-	//productService        repositories.Repository           = repositories.New()
+	//productService repositories.Repository = repositories.New()
 
 	cfg                   = entity.GetConfig()
 	postgreSQLClient, err = postgresql.NewClient(context.TODO(), 3, cfg.Storage)
@@ -28,6 +30,8 @@ func main() {
 	//server.DELETE("/cart/:id", Controller.DeleteFromCartByID)
 	//server.POST("/cart", Controller.AddToCart)
 	//server.PUT("/cart", Controller.UpdateCartControl)
+	//http.HandleFunc("", homePage)
+	// "RRR"
 	cart := server.Group("/cart")
 	{
 		cart.GET("/:id", Controller.SelectFromCartByID)
@@ -53,7 +57,7 @@ func main() {
 	}
 	server.POST("/user", Controller.Login)
 	server.GET("/user", Controller.Validate)
-
+	//"RRR"
 	//server.POST("/login", Controller.Login)
 	//server.GET("/products/:id", Controller.FindOneProduct)
 	//server.GET("/products", Controller.FindAllProducts)
@@ -102,4 +106,8 @@ func main() {
 	//	ctx.JSON(200, repository.FindOne(ctx))
 	//})
 
+}
+
+func homePage(response http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(response, "<h1>Hello world!")
 }

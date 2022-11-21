@@ -1,5 +1,5 @@
 storage:
-  host: localhost
+  host: db
   port: 5432
   database: golangproject
   username: postgres
