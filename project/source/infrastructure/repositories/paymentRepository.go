@@ -34,7 +34,6 @@ func (r *Repository) SelectPaymentByPaymentIdRepo(payment_id int) (entity.Paymen
 		SELECT payment_id,summ, total_price, payment_type FROM payment WHERE payment_id = $1
 	`
 	var payment entity.Payment
-	fmt.Println("AMP")
 	err := r.client.QueryRow(context.TODO(), q, payment_id).Scan(&payment.PaymentID, &payment.Summ, &payment.TotalPrice, &payment.PaymentType)
 	if err != nil {
 		return entity.Payment{}, err

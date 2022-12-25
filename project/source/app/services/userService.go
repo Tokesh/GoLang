@@ -3,7 +3,7 @@ package services
 import "projectGoLang/source/domain/entity"
 
 func (s Service) SignUpService(user entity.User) error {
-	return s.SignUpService(user)
+	return s.CreateUser(user)
 }
 
 func (s Service) FindUserId(user entity.User) entity.User {

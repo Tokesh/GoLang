@@ -20,8 +20,9 @@ var (
 	postgreSQLClient, err = postgresql.NewClient(context.TODO(), 3, cfg.Storage)
 	repository            = repositories.New(postgreSQLClient)
 	service               = services.NewService(&repository)
-	redisCache            = utils.NewRedisCache("localhost:6379", 0, 3600)
-	Controller            = controller.New(*service, *redisCache)
+	//redisCache            = utils.NewRedisCache("redis:6379", 0, 3600)
+	redisCache = utils.NewRedisCache("localhost:6379", 0, 3600)
+	Controller = controller.New(*service, *redisCache)
 )
 
 func main() {
@@ -32,7 +33,7 @@ func main() {
 	//server.PUT("/cart", Controller.UpdateCartControl)
 	//http.HandleFunc("", homePage)
 	// "RRR"
-	cart := server.Group("/cart")
+	cart := server.Group("/cart", Controller.Validate)
 	{
 		cart.GET("/:id", Controller.SelectFromCartByID)
 		cart.DELETE("/:id", Controller.DeleteFromCartByID)
@@ -43,11 +44,11 @@ func main() {
 	{
 		products.GET("/:id", Controller.FindOneProduct)
 		products.GET("", Controller.FindAllProducts)
-		products.POST("", Controller.CreateOneProduct)
-		products.PUT("", Controller.UpdateOneProduct)
-		products.DELETE("/:id", Controller.DeleteOneProduct)
+		products.POST("", Controller.Validate, Controller.CreateOneProduct)
+		products.PUT("", Controller.Validate, Controller.UpdateOneProduct)
+		products.DELETE("/:id", Controller.Validate, Controller.DeleteOneProduct)
 	}
-	payments := server.Group("/payments")
+	payments := server.Group("/payments", Controller.Validate)
 	{
 		payments.GET("/paymentId/:id", Controller.SelectPaymentByPaymentID)
 		payments.GET("/userId/:id", Controller.SelectPaymentByUserID)
@@ -55,8 +56,35 @@ func main() {
 		payments.PUT("", Controller.UpdatePaymentControl)
 		payments.DELETE("/:id", Controller.DeleteFromPayment)
 	}
-	server.POST("/user", Controller.Login)
-	server.GET("/user", Controller.Validate)
+	delivery := server.Group("/delivery", Controller.Validate)
+	{
+		delivery.GET("/:id", Controller.SelectDeliveryStatusController)
+		delivery.GET("/status/:id", Controller.SelectLastDeliveryStatusController)
+		delivery.POST("", Controller.AddDeliveryStatusController)
+		delivery.PUT("", Controller.UpdateDeliveryStatusController)
+		delivery.DELETE("", Controller.DeleteDeliveryStatusController)
+	}
+	brands := server.Group("/brand", Controller.Validate)
+	{
+		brands.GET("/:id", Controller.SelectBrandController)
+		brands.POST("/:brand_name", Controller.AddBrandController)
+		brands.PUT("", Controller.UpdateBrandController)
+		brands.DELETE("/:brand_name", Controller.DeleteBrandController)
+	}
+	storeInventory := server.Group("/storeinventory/", Controller.Validate)
+	{
+		storeInventory.GET("", Controller.SelectStoreInventoryController)
+		storeInventory.POST("", Controller.AddStoreInventoryController)
+		storeInventory.PUT("", Controller.UpdateStoreInventoryController)
+		storeInventory.DELETE("", Controller.DeleteStoreInventoryController)
+	}
+	user := server.Group("/user")
+	{
+		user.POST("/register", Controller.SignUp)
+		user.POST("/login", Controller.Login)
+		user.GET("/", Controller.Validate)
+	}
+
 	//"RRR"
 	//server.POST("/login", Controller.Login)
 	//server.GET("/products/:id", Controller.FindOneProduct)
