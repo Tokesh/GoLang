@@ -21,6 +21,8 @@ type Client interface {
 
 func NewClient(ctx context.Context, maxAttempts int, sc entity.StorageConfig) (pool *pgxpool.Pool, err error) {
 	dsn := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s", "postgres", "tokesh", "localhost", "5432", "golangproject")
+	// if you want to use docker - uncomment bottom lane
+	//dsn := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s", "postgres", "tokesh", "db", "5432", "postgres")
 	err = utils.DoWithTries(func() error {
 		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 		defer cancel()

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	_ "errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
