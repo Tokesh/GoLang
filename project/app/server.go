@@ -20,8 +20,8 @@ var (
 	postgreSQLClient, err = postgresql.NewClient(context.TODO(), 3, cfg.Storage)
 	repository            = repositories.New(postgreSQLClient)
 	service               = services.NewService(&repository)
-	//redisCache            = utils.NewRedisCache("redis:6379", 0, 3600)
-	redisCache = utils.NewRedisCache("localhost:6379", 0, 3600)
+	redisCache            = utils.NewRedisCache("redis:6379", 0, 3600)
+	//redisCache = utils.NewRedisCache("localhost:6379", 0, 3600)
 	Controller = controller.New(*service, *redisCache)
 )
 
@@ -77,6 +77,13 @@ func main() {
 		storeInventory.POST("", Controller.AddStoreInventoryController)
 		storeInventory.PUT("", Controller.UpdateStoreInventoryController)
 		storeInventory.DELETE("", Controller.DeleteStoreInventoryController)
+	}
+	order := server.Group("/order/", Controller.Validate)
+	{
+		order.GET("/:id", Controller.SelectOrderController)
+		order.POST("", Controller.AddOrderController)
+		order.PUT("", Controller.UpdateOrderController)
+		order.DELETE("/:id", Controller.DeleteOrderController)
 	}
 	user := server.Group("/user")
 	{
