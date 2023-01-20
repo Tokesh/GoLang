@@ -1,9 +1,13 @@
 ## About The Project
 
 
-
 This project was made for improving understanding in Back-End part using Gin as a main web-framework.
 <br>
+The idea is to organize a full-fledged platform for an online store
+<br>
+The entire business logic of the store was thought out. Like from view of list of product until of order a products
+<br>
+Order tracking,cart, payments were also implemented
 
 
 ### Built With
@@ -16,53 +20,65 @@ This project was made for improving understanding in Back-End part using Gin as 
 * [JWT Authorization]
 
 
+### How to run project with Docker?
+--> Open path to project in terminal<br>
+--> Write "docker-compose build"<br>
+--> After loading write "docker-compose up"<br>
+
+
 ### Layout
 ```tree
 project
 ├── app
 │   ├── controller
-│   │   ├── category_controller.go
-│   │   ├── product_controller.go
-│   │   ├── cart_controller.go
-│   │   ├── NewController.go
-│   │   ├── product_controller.go
-│   │   └── user_controller.go
-│   │
-│   ├── middleware
-│   │   ├── auth.go
-│   │   ├── LoadLocalVariables.go
-│   │   ├── basic_auth.go
-│   │   └── logger.go
+│   │   ├── brandController.go
+│   │   ├── cartController.go
+│   │   ├── deliveryController.go
+│   │   ├── inventoryController.go
+│   │   ├── orderController.go
+│   │   ├── paymentController.go
+│   │   ├── productController.go
+│   │   └── userController.go
 │   │
 │   └── server.go
 │
 ├── src
 │   ├── app
 │   │   └── service
-│   │       ├── category_service.go
-│   │       ├── product_service.go
-│   │       ├── NewService.go
-│   │       ├── cart_service.go
-│   │       └── user_service.go
+│   │       ├── brandService.go
+│   │       ├── cartService.go
+│   │       ├── deliveryService.go
+│   │       ├── orderService.go
+│   │       ├── paymentService.go
+│   │       ├── productService.go
+│   │       ├── storeInventoryService.go
+│   │       └── userService.go
 │   │
 │   ├── domain
 │   │   └── model
+│   │       ├── brand.go
 │   │       ├── cart.go
+│   │       ├── config.go
+│   │       ├── delivery.go
+│   │       ├── order.go
+│   │       ├── payment.go
 │   │       ├── product.go
-│   │       ├── category.go
+│   │       ├── storeInventory.go
 │   │       └── user.go
 │   │
 │   └── infrastructure
-│       ├── cache
-│       │   ├── product-cache.go
-│       │   └── redisCache.go
+│       ├── postgresql
+│       │   └── postgresql.go 
 │       │
-│       └── repository
-│           ├── category_repository.go
-│           ├── user_repository.go
-│           ├── cart_repository.go
-│           ├── product_repository.go
-│           └── postgres.go
+│       └── repositories
+│           ├── brandRepository.go
+│           ├── cartRepository.go
+│           ├── deliveryRepository.go
+│           ├── inventoryRepository.go
+│           ├── orderRepo.go
+│           ├── paymentRepository.go
+│           ├── productRepository.go
+│           └── userRepository.go
 │
 ├── .gitignore
 ├── .env.example
