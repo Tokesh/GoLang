@@ -5,9 +5,9 @@ This project was made for improving understanding in Back-End part using Gin as 
 <br>
 The idea is to organize a full-fledged platform for an online store
 <br>
-The entire business logic of the store was thought out. Like from view of list of product until of order a products
+The entire business logic of the store was thought out: from view of list of product until of order a products
 <br>
-Order tracking,cart, payments were also implemented
+Order tracking, cart, payments were also implemented
 
 
 ### Built With
