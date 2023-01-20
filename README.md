@@ -21,7 +21,7 @@ Order tracking, cart, payments were also implemented
 
 
 ### How to run project with Docker?
---> Open path to project in terminal<br>
+--> Open path to project in terminal (Check if a docker-compose file exists in current folder of path)<br>
 --> Write "docker-compose build"<br>
 --> After loading write "docker-compose up"<br>
 
